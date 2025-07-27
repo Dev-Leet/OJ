@@ -1,0 +1,17 @@
+{
+  "name": "judge-engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dockerode": "^4.0.7",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.0"
+  }
+}
