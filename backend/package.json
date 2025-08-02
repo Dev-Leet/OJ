@@ -1,15 +1,28 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "test": "jest",
-    "seed": "node scripts/seedDatabase.js"
+    "test:watch": "jest --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "docker:build": "docker build -t online-judge-backend .",
+    "docker:run": "docker run -p 5000:5000 online-judge-backend",
+    "seed": "node scripts/seedDatabase.js",
+    "cleanup": "node scripts/cleanup.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "online-judge",
+    "coding-platform",
+    "nodejs",
+    "express",
+    "mongodb",
+    "docker",
+    "competitive-programming"],
+  "author": "Devavrat Verma",
   "license": "ISC",
   "description": "",
   "dependencies": {
