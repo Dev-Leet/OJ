@@ -1,17 +1,13 @@
 {
   "name": "judge-engine",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Code execution engine for the Online Judge",
+  "main": "src/executor.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/executor.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "dockerode": "^4.0.7",
-    "express": "^5.1.0",
-    "fs-extra": "^11.3.0"
+    "dockerode": "^3.3.5",
+    "express": "^4.18.2"
   }
 }
