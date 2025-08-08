@@ -3,7 +3,8 @@ import axios from 'axios';
 import authService from './authService';
 
 // Define the base URL for the submissions API endpoint
-const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api') + '/submissions/';
+//const API_URL = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api') + '/submissions/';
+const API_URL = '/api/submissions';
 
 // --- Helper function to get auth token ---
 const getAuthHeader = () => {

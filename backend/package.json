@@ -1,13 +1,21 @@
 {
-  "name": "backend",
+  "name": "online-judge-backend",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "data:import": "node seeder",
+    "data:destroy": "node seeder -d"
   },
-  "keywords": [],
+  "keywords": [
+    "online-judge",
+    "coding-platform",
+    "nodejs",
+    "express",
+    "mongodb",
+    "docker",
+    "competitive-programming"],
   "author": "",
   "license": "ISC",
   "description": "",
@@ -31,7 +39,6 @@
     "validator": "^13.15.15"
   },
   "devDependencies": {
-    "lru-cache": "^11.1.0",
     "mongodb-memory-server": "^10.2.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"

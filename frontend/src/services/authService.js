@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // Define the base URL for the API. In development, this might be 'http://localhost:5000/api'.
 // In production, this would be your deployed backend URL.
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+//const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = '/api';
 
 /**
  * Registers a new user by sending a POST request to the backend.
