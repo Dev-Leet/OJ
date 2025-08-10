@@ -1,43 +1,31 @@
 // frontend/src/components/auth/Login.js
 import React, { useState, useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate instead of useHistory
 import { AuthContext } from '../../context/AuthContext';
 
 const Login = () => {
-  // State to hold form data
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
-
-  const { email, password } = formData;
-
-  // Get login function and user state from AuthContext
   const { login, user } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Redirect if user is already logged in
   if (user) {
-    history.push('/dashboard');
+    navigate('/dashboard'); // Use navigate to redirect
   }
 
-  // Update state on form input change
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // Handle form submission
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
-    if (!email || !password) {
-      return setError('Please fill in all fields');
-    }
+    setError('');
     try {
-      await login(email, password);
-      history.push('/dashboard'); // Redirect to dashboard on successful login
+      await login(formData.email, formData.password);
+      navigate('/dashboard'); // Use navigate to redirect
     } catch (err) {
-      // Set error message from API response or a generic one
       const errorMessage =
         err.response && err.response.data.message
           ? err.response.data.message

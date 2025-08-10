@@ -1,16 +1,16 @@
 // frontend/src/components/layout/Navbar.js
 import React, { useContext, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
-  const history = useHistory();
-  const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    history.push('/login');
+    navigate('/login'); // Use navigate to redirect
   };
 
   // Links for authenticated users

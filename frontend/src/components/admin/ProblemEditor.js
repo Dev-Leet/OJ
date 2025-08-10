@@ -1,14 +1,13 @@
 // frontend/src/components/admin/ProblemEditor.js
 import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'; // Import useNavigate
 import problemService from '../../services/problemService';
 
 const ProblemEditor = () => {
-  const { id: problemId } = useParams(); // Get problem ID from URL for editing
-  const history = useHistory();
+  const { id: problemId } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate
   const isEditMode = Boolean(problemId);
 
-  // State for form data, loading, and errors
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -20,18 +19,15 @@ const ProblemEditor = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch problem data if in edit mode
   useEffect(() => {
     if (isEditMode) {
       const fetchProblem = async () => {
         setLoading(true);
         try {
           const problem = await problemService.getProblemById(problemId);
-          // Format tags array back into a comma-separated string for the input field
           setFormData({ ...problem, tags: problem.tags.join(', ') });
         } catch (err) {
           setError('Failed to load problem data.');
-          console.error(err);
         } finally {
           setLoading(false);
         }
@@ -40,14 +36,10 @@ const ProblemEditor = () => {
     }
   }, [problemId, isEditMode]);
 
-  // --- Handlers ---
-
-  // Handle changes for simple input fields
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle changes within a specific test case
   const handleTestCaseChange = (index, e) => {
     const updatedTestCases = formData.testCases.map((tc, i) =>
       i === index ? { ...tc, [e.target.name]: e.target.value } : tc
@@ -55,7 +47,6 @@ const ProblemEditor = () => {
     setFormData({ ...formData, testCases: updatedTestCases });
   };
 
-  // Add a new, empty test case field
   const addTestCase = () => {
     setFormData({
       ...formData,
@@ -63,34 +54,28 @@ const ProblemEditor = () => {
     });
   };
 
-  // Remove a test case by its index
   const removeTestCase = (index) => {
     const filteredTestCases = formData.testCases.filter((_, i) => i !== index);
     setFormData({ ...formData, testCases: filteredTestCases });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    // Prepare payload, converting tags string to an array
     const payload = {
       ...formData,
       tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
     };
-
     try {
       if (isEditMode) {
         await problemService.updateProblem(problemId, payload);
       } else {
         await problemService.createProblem(payload);
       }
-      history.push('/admin'); // Redirect to admin dashboard on success
+      navigate('/admin'); // Use navigate to redirect
     } catch (err) {
       setError('Failed to save the problem. Please check your input.');
-      console.error(err);
     } finally {
       setLoading(false);
     }

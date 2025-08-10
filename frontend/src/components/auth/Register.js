@@ -1,55 +1,38 @@
 // frontend/src/components/auth/Register.js
 import React, { useState, useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate
 import { AuthContext } from '../../context/AuthContext';
 import authService from '../../services/authService';
 
 const Register = () => {
-  // State to hold form data and errors
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    password2: '', // For password confirmation
+    password2: '',
   });
   const [error, setError] = useState('');
-
-  const { name, email, password, password2 } = formData;
-
-  // Get user state and login function from AuthContext to log the user in after registration
   const { user, login } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Redirect if user is already logged in
   if (user) {
-    history.push('/dashboard');
+    navigate('/dashboard');
   }
 
-  // Update state on form input change
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // Handle form submission
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
-
-    // Basic client-side validation
-    if (!name || !email || !password) {
-      return setError('Please fill in all fields');
-    }
-    if (password !== password2) {
+    setError('');
+    if (formData.password !== formData.password2) {
       return setError('Passwords do not match');
     }
-
     try {
-      // Call the registration service
-      await authService.register({ name, email, password });
-      // Automatically log the user in after successful registration
-      await login(email, password);
-      history.push('/dashboard'); // Redirect to dashboard
+      await authService.register(formData);
+      await login(formData.email, formData.password);
+      navigate('/dashboard'); // Use navigate to redirect
     } catch (err) {
-      // Set error message from API response or a generic one
       const errorMessage =
         err.response && err.response.data.message
           ? err.response.data.message

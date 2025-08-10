@@ -1,6 +1,6 @@
 // frontend/src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import Routes instead of Switch
 import { AuthProvider } from './context/AuthContext';
 
 // Layout Components
@@ -27,20 +27,20 @@ const App = () => {
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-grow container mx-auto px-4 py-8">
-            <Switch>
+            <Routes> {/* Use Routes instead of Switch */}
               {/* Public Routes */}
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route path="/problems" component={ProblemPage} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/problems/*" element={<ProblemPage />} /> {/* Add /* for nested routes */}
 
               {/* Private Routes (for authenticated users) */}
-              <PrivateRoute exact path="/dashboard" component={DashboardPage} />
-              <PrivateRoute exact path="/submissions" component={SubmissionPage} />
+              <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+              <Route path="/submissions" element={<PrivateRoute><SubmissionPage /></PrivateRoute>} />
 
               {/* Admin Routes (for authenticated admins) */}
-              <AdminRoute path="/admin" component={AdminPage} />
-            </Switch>
+              <Route path="/admin/*" element={<AdminRoute><AdminPage /></AdminRoute>} /> {/* Add /* for nested routes */}
+            </Routes>
           </main>
           <Footer />
         </div>
