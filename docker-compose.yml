@@ -9,7 +9,7 @@ services:
       - "5000:5000"
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - backend_node_modules:/app/node_modules
     environment:
       - MONGO_URI=${MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
@@ -25,7 +25,7 @@ services:
       - "3000:80" # Map host port 3000 to container port 80 (Nginx)
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - frontend_node_modules:/app/node_modules
     depends_on:
       - backend
   
@@ -35,7 +35,25 @@ services:
       - "8080:8080" # Expose the port for debugging if needed
     volumes:
       - ./judge-engine:/app
-      - /app/node_modules
+      - judge_node_modules:/app/node_modules
+  
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: examplepassword
+      MONGO_INITDB_DATABASE: ojdb
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo_data:
+  backend_node_modules:
+  frontend_node_modules:
+  judge_node_modules:
 
 networks:
   default:
