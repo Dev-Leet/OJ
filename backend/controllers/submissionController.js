@@ -1,75 +1,63 @@
 // backend/controllers/submissionController.js
 const Submission = require('../models/Submission');
 const Problem = require('../models/Problem');
-const { executeCode } = require('../../judge-engine/judge');
+const axios = require('axios'); // You'll need to install axios: npm install axios
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-/**
- * @desc    Create a new submission and evaluate it
- * @route   POST /api/submissions
- * @access  Private
- */
+// The URL for the judge engine service, as defined in docker-compose.yml
+const JUDGE_ENGINE_URL = 'http://judge-engine:8080/execute';
+
 exports.createSubmission = async (req, res) => {
   const { problemId, language, code } = req.body;
   const userId = req.user._id;
 
-  if (!problemId || !language || !code) {
-    return res.status(400).json({ message: 'Please provide problemId, language, and code' });
-  }
-
   try {
-    // 1. Create a submission document with a 'Pending' status
-    const pendingSubmission = await Submission.create({
-      userId,
-      problemId,
-      language,
-      code,
-      status: 'Pending',
-    });
-
-    // 2. Fetch the problem to get its test cases
     const problem = await Problem.findById(problemId);
     if (!problem) {
       return res.status(404).json({ message: 'Problem not found' });
     }
 
-    // 3. Evaluate the code against each test case
     let finalStatus = 'Accepted';
     let resultDetails = {};
 
     for (const testCase of problem.testCases) {
       try {
-        // The judge.js executeCode function handles running the docker container
-        const output = await executeCode(language, code, testCase.input);
+        // Make an API call to the judge engine
+        const response = await axios.post(JUDGE_ENGINE_URL, {
+          language,
+          code,
+          input: testCase.input,
+        });
 
-        // Trim whitespace from both actual and expected outputs for a robust comparison
-        if (output.trim() !== testCase.output.trim()) {
+        const output = response.data.output.trim();
+        if (output !== testCase.output.trim()) {
           finalStatus = 'Wrong Answer';
           resultDetails = {
             testCase: { input: testCase.input, expectedOutput: testCase.output },
-            actualOutput: output.trim(),
+            actualOutput: output,
           };
-          break; // Stop on the first failed test case
+          break;
         }
       } catch (err) {
-        // Handle runtime errors from the execution engine
         finalStatus = 'Runtime Error';
         resultDetails = {
-          error: err.stderr || err.message || 'An unknown runtime error occurred',
+          error: err.response?.data?.error || 'An unknown runtime error occurred',
           testCase: { input: testCase.input },
         };
-        break; // Stop on runtime error
+        break;
       }
     }
 
-    // 4. Update the submission with the final result
-    const finalSubmission = await Submission.findByIdAndUpdate(
-      pendingSubmission._id,
-      { status: finalStatus, resultDetails },
-      { new: true } // Return the updated document
-    ).populate('problemId', 'title');
+    const submission = await Submission.create({
+      userId,
+      problemId,
+      language,
+      code,
+      status: finalStatus,
+      resultDetails,
+    });
 
-    res.status(201).json(finalSubmission);
+    res.status(201).json(submission);
 
   } catch (error) {
     console.error(`Error in createSubmission: ${error.message}`);

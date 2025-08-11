@@ -16,6 +16,8 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     env_file:
       - ./backend/.env
+    depends_on:
+      - judge-engine # Backend depends on the judge engine
 
   frontend:
     build: ./frontend
@@ -26,6 +28,14 @@ services:
       - /app/node_modules
     depends_on:
       - backend
+  
+  judge-engine:
+    build: ./judge-engine
+    ports:
+      - "8080:8080" # Expose the port for debugging if needed
+    volumes:
+      - ./judge-engine:/app
+      - /app/node_modules
 
 networks:
   default:

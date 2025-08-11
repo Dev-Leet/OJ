@@ -15,12 +15,14 @@
     "express",
     "mongodb",
     "docker",
-    "competitive-programming"],
+    "competitive-programming"
+  ],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",

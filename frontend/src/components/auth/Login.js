@@ -1,6 +1,6 @@
 // frontend/src/components/auth/Login.js
 import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const Login = () => {
@@ -10,10 +10,10 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const { login, user } = useContext(AuthContext);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   if (user) {
-    navigate('/dashboard'); // Use navigate to redirect
+    navigate('/dashboard');
   }
 
   const onChange = (e) =>
@@ -24,7 +24,7 @@ const Login = () => {
     setError('');
     try {
       await login(formData.email, formData.password);
-      navigate('/dashboard'); // Use navigate to redirect
+      navigate('/dashboard');
     } catch (err) {
       const errorMessage =
         err.response && err.response.data.message
@@ -67,7 +67,7 @@ const Login = () => {
                 required
                 className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
-                value={email}
+                value={formData.email}
                 onChange={onChange}
               />
             </div>
@@ -83,7 +83,7 @@ const Login = () => {
                 required
                 className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
-                value={password}
+                value={formData.password}
                 onChange={onChange}
               />
             </div>

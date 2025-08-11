@@ -11,7 +11,7 @@ COPY package*.json ./
 
 # Install backend dependencies
 RUN npm install
-
+RUN npm install axios 
 # Copy the rest of the backend source code to the working directory
 COPY . .
 
