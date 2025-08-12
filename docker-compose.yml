@@ -37,17 +37,17 @@ services:
       - ./judge-engine:/app
       - judge_node_modules:/app/node_modules
   
-  mongo:
-    image: mongo:6
-    restart: unless-stopped
-    volumes:
-      - mongo_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: examplepassword
-      MONGO_INITDB_DATABASE: ojdb
-    ports:
-      - "27017:27017"
+  # mongo:
+  #   image: mongo:6
+  #   restart: unless-stopped
+  #   volumes:
+  #     - mongo_data:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: examplepassword
+  #     MONGO_INITDB_DATABASE: ojdb
+  #   ports:
+  #     - "27017:27017"
 
 volumes:
   mongo_data:
