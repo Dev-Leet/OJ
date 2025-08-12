@@ -1,8 +1,9 @@
 // frontend/src/index.js
 import React from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 import './index.css'; // Main stylesheet for global styles (e.g., Tailwind CSS)
 import App from './App';
+import { createRoot } from 'react-dom/client';
 
 /**
  * This is the entry point of the React application.
@@ -16,9 +17,18 @@ import App from './App';
  * problems in an application. It activates additional checks and warnings
  * for its descendants.
  */
-ReactDOM.render(
+
+/* ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root') */
+  
+  const container = document.getElementById('root');
+  const root = createRoot(container); // createRoot(container!) if using TS
+  root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+
 );
